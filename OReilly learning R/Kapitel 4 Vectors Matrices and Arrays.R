@@ -91,6 +91,218 @@ rep_len(c(83,32,1), 13) # without warning
 # special case of two-dimensional arrays.
 
 ## Create an Array
-ar1 <- array(1:4, 1:3)
-ar1
-View(ar1)
+
+# Several dimensions: 
+# The entries are filled columnwise
+(three_d_array <- array(
+  1:24,
+  dim = c(4, 3, 2),
+  dimnames = list(
+    c("one", "two", "three", "four"),
+    c("eins", "zwei", "drei"),
+    c("un", "deux")
+  )
+))
+
+# [if the size of the entries of the input (below 1:25) is less than the total number of array entries, the input will be repeated]
+(four_d_array <- array(
+  1:25,
+  dim = c(4, 3, 2, 2),
+  dimnames = list(
+    c("one", "two", "three", "four"),
+    c("eins", "zwei", "drei"),
+    c("un", "deux"),
+    c("uno", "dos")
+  )
+))
+class(four_d_array)
+
+
+# Matrices are just two dimensional arrays:
+(two_d_array <- array(
+  1:12,
+  dim = c(4, 3),
+  dimnames = list(
+    c("one", "two", "three", "four"),
+    c("eins", "zwei", "drei")
+  )
+))
+class(two_d_array)
+
+# There is also another method to specifically construct matrices:
+(a_matrix <- matrix(
+  1:12,
+  nrow = 4, #ncol = 3 works the same
+  dimnames = list(
+    c("one", "two", "three", "four"),
+    c("eins", "zwei", "drei")
+  )
+))
+identical(two_d_array, a_matrix)
+
+# The values that you passed in fill the matrix column-wise. Use the argument byrow = TRUE to do otherwise:
+matrix(
+  1:12,
+  ncol = 3
+  byrow = TRUE,
+  dimnames = list(
+    c("one", "two", "three", "four"),
+    c("eins", "zwei", "drei")
+)
+
+
+## Dimension, ncol and nrow
+dim(four_d_array)
+dim(a_matrix)
+
+# ncol returns the amount of the first array, ncol the one of the second array
+ncol(four_d_array)
+nrow(four_d_array)
+ncol(a_matrix)
+nrow(a_matrix)
+
+# NROW and NCOL are similar to ncol and nrow but will also work vor vectors (ncol/nrow returning NULL)
+a_vector <- 1:8
+NROW(a_vector)
+NCOL(a_vector)
+nrow(a_vector)
+ncol(a_vector)
+# dim does not work for vectors
+dim(a_vector)
+
+# Be careful! length returns the number of entries (just as for the vector)
+length(a_matrix)
+length(three_d_array)
+length(four_d_array)
+
+## Row Column and Dimension names
+# As we have seen in the example, we can assign names to the dimensions
+# We can do this also after the initialization
+
+rownames(a_matrix) <- c("EINS", "ZWEI", "DREI", "VIER")
+colnames(a_matrix) <- c("ONE", "TWO", "THREE")
+a_matrix
+
+# dimnames is similar but returns a list and therefore we change our 
+dimnames(a_matrix) <- list(c("one", "two", "three", "four"), c("eins", "zwei", "drei")) 
+
+
+## Indexing an Array 
+# works the same as with vectors except that one needs to seperate the different dimensions with commas
+four_d_array[c(TRUE, FALSE, TRUE, FALSE), , c(TRUE, FALSE), "uno"]
+four_d_array[c(TRUE, FALSE, TRUE, FALSE), c(2,3), c(TRUE, FALSE), -1]
+a_matrix[c("three", "one"), c("zwei", "drei")]
+
+## Combining Matrices
+# The c function converts matrices to vectors before concatenating them:
+  (another_matrix <- matrix(
+    seq.int(102, 124, 2),
+    nrow = 4,
+    dimnames = list(
+      c("five", "six", "seven", "eight"),
+      c("vier", "fünf", "sechs")
+    )
+  ))
+c(a_matrix, another_matrix)
+
+# cbind and rbind concatinate the matrices in a more natural way
+cbind(a_matrix, another_matrix)
+rbind(a_matrix, another_matrix)
+rbind(cbind(a_matrix, another_matrix), cbind(another_matrix, a_matrix))
+
+
+## Array Arithmetic
+# +, -, *, /. ^ work element-wise
+a_matrix + another_matrix -2*another_matrix
+a_matrix * another_matrix / a_matrix
+another_matrix / 2
+(a_matrix ^(-1))
+
+a_matrix
+
+# Doing operations on non-equal dimensional arrays will repeat the operation on the elements 
+# and an warning will be displayed if they are not divisible (similar to adding vectors - "vector recycling rules")
+a_vector <- 1:8
+four_d_array * a_vector
+length(four_d_array) / length(a_vector)
+a_vector <- 1:5
+four_d_array * a_vector
+length(four_d_array) / length(a_vector)
+
+
+## Matrix operations
+# t is transponation
+t(a_matrix)
+identical(a_matrix, t(t(a_matrix)))
+# %*% is the classical matrix multiplication
+a_matrix %*% t(another_matrix)
+a_vector <- 1:nrow(a_matrix)
+a_vector %*% a_matrix
+
+a_vector <- 1:ncol(a_matrix)
+a_matrix %*% a_vector
+
+# %o% or outer() is outer or tensor product of matrices
+a_vector %o% a_vector
+a_vector <- 1:4
+(even_another_matrix <- x %o% x)
+class(even_another_matrix)
+
+identical(even_another_matrix, outer(x,x))
+
+# inverting a matrix has to be done with the solve function [or qr.sovlve(m) or chol2inv(chol(m))]
+yet_another_matrix <- cbind(1:3, 6:4, c(8,7,9))
+inverted_matrix <- solve(yet_another_matrix)
+yet_another_matrix %*% inverted_matrix
+
+# the crossproduct
+crossprod(a_vector, 1:length(a_vector))
+tcrossprod(a_vector, 1:length(a_vector))
+
+# the eigen fuction returns vectors and values
+eigen(yet_another_matrix)
+
+
+### Exercises:
+##Exercise 4-1
+# The nth triangular number is given by n * (n + 1) / 2. Create a sequence of
+# the first 20 triangular numbers. R has a built-in constant, letters, that
+# contains the lowercase letters of the Roman alphabet. Name the elements of the
+# vector that you just created with the first 20 letters of the alphabet. Select
+# the triangular numbers where the name is a vowel.
+n <- 1:20
+triangular <- n*(n+1)/2
+names(triangular) <- letters[seq_along(n)] # we use seq_along as it is safer.However, we could also use n
+triangular[c("a", "e", "i", "o", "u")]
+
+## Exercise 4-2 
+# The diag function has several uses, one of which is to take a vector as its
+# input and create a square matrix with that vector on the diagonal. Create a
+# 21-by-21 matrix with the sequence 10 to 0 to 10 (i.e., 10, … , 1, 0, 1, …,
+# 10).
+ex4.2_matrix <- diag(abs(-10:10))
+
+## Exercise 4-3
+# By passing two extra arguments to diag, you can specify the dimensions of the
+# output. Create a 20-by-21 matrix with ones on the main diagonal. Now add a row
+# of zeros above this to create a 21-by-21 square matrix, where the ones are offset a
+# row below the main diagonal.
+matrix <- diag(rep(1, 20),nrow = 20,ncol = 21)
+matrix <- rbind(0, matrix)
+dim(matrix)
+
+# Create another matrix with the ones offset one up from the diagonal.
+other_matrix <- diag(rep(1, 20),nrow = 21,ncol = 20)
+other_matrix <- cbind(0, other_matrix)
+
+# Add these two matrices together, then add the answer from Exercise 4-2. The resultant
+# matrix is called a Wilkinson matrix.
+wilkinson.matrix <- matrix + other_matrix + ex4.2_matrix
+
+# The eigen function calculates eigenvalues and eigenvectors of a matrix. Calculate
+# the eigenvalues for your Wilkinson matrix. What do you notice about them?
+
+eigen(wilkinson.matrix)$values
+
+# Two eigenvalues are often quite near, the more we get to 0 the more they differ.
+# The eigenvectors are "symmetric"
