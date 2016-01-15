@@ -1,6 +1,6 @@
 ##################### Notizen zu Learning R (O'Reilly)
 
-######### Kapitel 1: Installatation und Hilfe-Themen
+######### Kapitel 1: Installatation and Help
 
 
 ###Help and search
