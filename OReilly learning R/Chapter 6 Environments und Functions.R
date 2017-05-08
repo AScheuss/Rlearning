@@ -1,4 +1,4 @@
-############# Kapitel 6: Environments and Functions
+############# Chapter 6: Environments and Functions
 
 ### Environments
 ## Environments are namespaces of our variables

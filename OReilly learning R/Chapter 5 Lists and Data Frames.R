@@ -1,4 +1,4 @@
-#### Kapitel 5 Lists and Data Frames
+#### Chapter 5 Lists and Data Frames
 ## Lists and data frames let us combine different types
 
 ### Lists (Vectors with different types)

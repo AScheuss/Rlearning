@@ -1,4 +1,4 @@
-##### Vectors
+##### Chapter 4 Vectors
 
 ## We know the Colon operator:
 4.6:6.8

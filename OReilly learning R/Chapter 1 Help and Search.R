@@ -1,7 +1,4 @@
-##################### Notizen zu Learning R (O'Reilly)
-
-######### Kapitel 1: Installatation and Help
-
+######### Chapter 1: Installatation and Help
 
 ###Help and search
 
@@ -18,7 +15,7 @@ help("+")
 help.search("median") #Does the same
 help.search("if")
 
-#?? bzw. help.search sucht nur auf diesem System. Um in allen packages zu suchen benutze
+#?? bzw. help.search searches only on this system. To search in all packages use
 RSiteSearch("Sweave")
 # Multiword terms need to be wrapped in braces
 RSiteSearch("{Bayesian regression}")
