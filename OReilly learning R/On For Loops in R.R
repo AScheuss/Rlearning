@@ -14,6 +14,8 @@ bar.squared = rep(NA, 200000)
 for (i in 1:length(bar) ) {
   bar.squared[i] = bar[i]^2
 }
+# better
+bar.squared <- bar^2
 
 #get rid of excess NAs
 bar.squared = bar.squared[!is.na(bar.squared)]
